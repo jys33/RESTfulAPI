@@ -187,6 +187,7 @@
             output.innerHTML = `<p>Capital: <span>${obj.capital}</span></p>
             <p>Prefijo teléfonico: <span>+${obj.callingCodes[0]}</span></p>
             <p>Población: <span>${obj.population.toLocaleString()} habitantes</span></p>
+            <p>Superficie: <span>${obj.area.toLocaleString()} km<sup>2</sup></span></p>
             <p>Monedas: <span>${obj.currencies.filter(c => c.name).map(c => `${c.name} (${c.code})`).join(", ")}</span></p>
             <p>Idioma: <span>${obj.languages[0].nativeName}</span></p>
             <p>Región: <span>${obj.region}</span></p>
