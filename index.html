@@ -85,12 +85,8 @@
 
         /* RestFull API */
 
-        #output p {
+        p span {
             font-weight: 600;
-        }
-
-        #output p span {
-            font-weight: normal;
         }
     </style>
 </head>
@@ -129,13 +125,13 @@
                                 target="_blank"> aquí</a></p>
                     </div>
 
-                    <div class="">
+                    <div id="img" style="border: 1px solid #ced4da;display: none;">
                         <img src="" alt="" width="100%">
                     </div>
 
                     <select class="custom-select my-3" name="countries" id="countries"
                         style="text-align-last: center;"></select>
-                        
+
                     <div id="output"></div>
                 </div>
 
@@ -180,18 +176,19 @@
         }
 
         function showInfo(event) {
+            document.getElementById("img").style.display = 'block';
             let obj = myData[event.target.value];
             document.querySelector('img').src = obj.flag;
             document.querySelector('img').alt = `Flag of ${obj.name}`;
 
-            output.innerHTML = `<p>Capital: <span>${obj.capital}</span></p>
-            <p>Prefijo teléfonico: <span>+${obj.callingCodes[0]}</span></p>
-            <p>Población: <span>${obj.population.toLocaleString()} habitantes</span></p>
-            <p>Superficie: <span>${obj.area.toLocaleString()} km<sup>2</sup></span></p>
-            <p>Monedas: <span>${obj.currencies.filter(c => c.name).map(c => `${c.name} (${c.code})`).join(", ")}</span></p>
-            <p>Idioma: <span>${obj.languages[0].nativeName}</span></p>
-            <p>Región: <span>${obj.region}</span></p>
-            <p>Subregión: <span>${obj.subregion}</span></p>`;
+            output.innerHTML = `<p><span>Capital:</span> ${obj.capital}</p>
+            <p><span>Prefijo teléfonico:</span> +${obj.callingCodes[0]}</p>
+            <p><span>Población:</span> ${obj.population.toLocaleString()} habitantes</p>
+            <p><span>Superficie:</span> ${obj.area.toLocaleString()} km<sup>2</sup></p>
+            <p><span>Monedas:</span> ${obj.currencies.filter(c => c.name).map(c => `${c.name} (${c.code})`).join(", ")}</p>
+            <p><span>Idioma:</span> ${obj.languages[0].nativeName}</p>
+            <p><span>Región:</span> ${obj.region}</p>
+            <p><span>Subregión:</span> ${obj.subregion}</p>`;
         }
 
         function buildOption(data) {
