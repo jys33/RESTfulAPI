@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<!-- https://www.w3schools.com/html/html_head.asp
+    https://www.w3schools.com/html/html_layout.asp
+    https://www.w3schools.com/css/tryit.asp?filename=trycss_sel_element_gt -->
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="description" content="HTML Template">
+    <meta name="keywords" content="HTML,CSS,JavaScript">
+    <meta name="author" content="Julio Cesar">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Harvard layout</title>
+
+    <style>
+        /* RESET STYLES */
+        *:hover,
+        *:focus,
+        *:active {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        @media screen and (min-width: 768px) {
+            aside.col-md {
+                height: 100vh;
+                overflow-y: auto;
+                top: 0;
+                z-index: 1020;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            aside.col-md {
+                position: sticky;
+            }
+        }
+
+        @media screen and (min-width: 768px) {
+            aside.col-md {
+                flex: 0 1 20rem;
+            }
+        }
+
+        aside a,
+        aside a:hover {
+            background-color: inherit;
+            color: white;
+        }
+
+        aside {
+            font-size: 1.125rem;
+            background-color: crimson
+                /*#016714*/
+            ;
+            color: white;
+        }
+
+        aside.col-md {
+            padding: 2rem;
+        }
+
+        main.col-md {
+            max-width: 80rem;
+            overflow: auto;
+            padding: 2rem 2rem;
+        }
+
+        nav>*:first-child {
+            margin-top: 1rem;
+        }
+
+        .fa-ul {
+            padding-left: 0;
+            margin-left: 0;
+            list-style-type: none;
+        }
+
+        /* RestFull API */
+
+        #output p {
+            font-weight: 600;
+        }
+
+        #output p span {
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md">
+                <header>
+                    <h1><a class="" href="/">PHPApp</a></h1>
+                    <p>User registration system</p>
+                </header>
+                <button class="btn btn-sm btn-outline-light d-md-none" type="button" data-toggle="collapse"
+                    data-target="aside > nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+                    Menú
+                </button>
+                <nav class="d-md-block collapse">
+                    <ul class="fa-ul">
+                        <li class=""><a class="" href="#">Home <span class="sr-only">(current)</span></a></li>
+                    </ul>
+                    <hr>
+                    <ul class="fa-ul">
+                        <li class=""><a class="" href="#">Login</a></li>
+                        <li class=""><a class="" href="#">Register</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main role="main" class="col-md">
+
+                <!-- Container RESTful API -->
+                <div style="width: 100%;max-width: 400px;margin: auto;">
+                    <div class="text-center">
+                        <h2>REST Country API</h2>
+                        <p>Get information about countries via a RESTful API<a href="https://restcountries.eu"
+                                target="_blank"> aquí</a></p>
+                    </div>
+
+                    <div class="">
+                        <img src="" alt="" width="100%">
+                    </div>
+
+                    <select class="custom-select my-3" name="countries" id="countries"
+                        style="text-align-last: center;"></select>
+                        
+                    <div id="output"></div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script>
+
+        let countriesList = document.querySelector('#countries');
+        let output = document.querySelector('#output');
+        let options = "<option disabled selected>Selecciona un País</option>";
+        let myData = {};
+
+        (function () {
+            'use strict';
+
+            let result = fetch('https://restcountries.eu/rest/v2/all');
+            result.then(function (response) {
+                // console.log('response: ', response);
+                // console.log('header: ', response.headers.get('Content-Type'));
+                return response.json();
+            }).then(function (data) {
+                // console.log('got json: ', data);
+                myData = data;
+
+                init(data);
+
+            }).catch(function (ex) {
+                console.log('failed: ', ex);
+            });
+
+        })();
+
+        function init(data) {
+            data.forEach(function (elt, index) {
+                options += `<option value="${index}">${elt.name}</option>`;
+            });
+
+            countriesList.innerHTML = options;
+            countriesList.onchange = showInfo;
+        }
+
+        function showInfo(event) {
+            let obj = myData[event.target.value];
+            document.querySelector('img').src = obj.flag;
+            document.querySelector('img').alt = `Flag of ${obj.name}`;
+
+            output.innerHTML = `<p>Capital: <span>${obj.capital}</span></p>
+            <p>Prefijo teléfonico: <span>+${obj.callingCodes[0]}</span></p>
+            <p>Población: <span>${obj.population.toLocaleString()} habitantes</span></p>
+            <p>Monedas: <span>${obj.currencies.filter(c => c.name).map(c => `${c.name} (${c.code})`).join(", ")}</span></p>
+            <p>Idioma: <span>${obj.languages[0].nativeName}</span></p>
+            <p>Región: <span>${obj.region}</span></p>
+            <p>Subregión: <span>${obj.subregion}</span></p>`;
+        }
+
+        function buildOption(data) {
+            let option;
+            data.forEach(function (item, index) {
+                option = document.createElement('option');
+                option.value = index;
+                option.textContent = item.name;
+                countriesList.appendChild(option);
+            });
+
+            countriesList.addEventListener("change", showInfo);
+        }
+
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
