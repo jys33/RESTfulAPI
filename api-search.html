@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Obten información de la API de wikimedia</h2>
+
+    <p>
+        Ingrese su busqueda:
+        <input type="text" id="userinput" value="">
+    </p>
+
+    <script>
+        // https://www.mediawiki.org/wiki/API:Search
+        let userInput = select('#userinput');
+        userInput.onchange = goWiki;
+
+        function goWiki() {
+            let term = userInput.value;
+            var url = "https://en.wikipedia.org/w/api.php";
+            let otherUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${term}`;
+
+            // var params = {
+            //     action: "query",
+            //     list: "search",
+            //     srsearch: term,
+            //     format: "json"
+            // };
+
+            // url = url + "?origin=*";
+            // Object.keys(params).forEach(function (key) {
+            //     url += "&" + key + "=" + params[key];
+            // });
+            fetch(otherUrl)
+                .then(function (response) { return response.json(); })
+                .then(function (response) {
+                    // if (response.query.search[0].title === "Nelson Mandela") {
+                    //     console.log("Your search page 'Nelson Mandela' exists on English Wikipedia");
+                    // }
+                    console.log(response);
+                })
+                .catch(function (error) { console.log(error); });
+        }
+
+        function select(el) {
+            return document.querySelector(el);
+        }
+    </script>
+</body>
+
+</html>
